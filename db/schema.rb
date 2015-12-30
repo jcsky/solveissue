@@ -11,11 +11,91 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230134801) do
+ActiveRecord::Schema.define(version: 20151230145457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "cities", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "districts", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "name"
+    t.uuid     "city_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "districts", ["city_id"], name: "index_districts_on_city_id", using: :btree
+
+  create_table "elections", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "parties", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "politician_elections", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "result"
+    t.uuid     "politician_id"
+    t.uuid     "election_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "politician_elections", ["election_id"], name: "index_politician_elections_on_election_id", using: :btree
+  add_index "politician_elections", ["politician_id"], name: "index_politician_elections_on_politician_id", using: :btree
+
+  create_table "politician_vote_records", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.integer  "user_id"
+    t.uuid     "politician_id"
+    t.integer  "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "politician_vote_records", ["politician_id"], name: "index_politician_vote_records_on_politician_id", using: :btree
+  add_index "politician_vote_records", ["user_id"], name: "index_politician_vote_records_on_user_id", using: :btree
+
+  create_table "politician_votes", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.integer  "reputation"
+    t.text     "up_voted_user_ids"
+    t.text     "down_voted_user_ids"
+    t.uuid     "politician_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "politician_votes", ["politician_id"], name: "index_politician_votes_on_politician_id", using: :btree
+
+  create_table "politicians", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "name"
+    t.uuid     "party_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "politicians", ["party_id"], name: "index_politicians_on_party_id", using: :btree
+
+  create_table "profiles", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.integer  "gender"
+    t.date     "birthday"
+    t.string   "name"
+    t.uuid     "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
