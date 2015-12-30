@@ -237,7 +237,6 @@ DEPENDENCIES
   kaminari
   letter_opener
   meta-tags
-  omniauth
   omniauth-facebook
   pg
   phone

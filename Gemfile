@@ -35,7 +35,6 @@ gem 'phone'
 gem 'aasm'
 gem 'high_voltage'
 
-gem 'omniauth'
 gem 'omniauth-facebook'
 
 
