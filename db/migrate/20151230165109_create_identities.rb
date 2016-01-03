@@ -1,6 +1,6 @@
 class CreateIdentities < ActiveRecord::Migration
   def change
-    create_table :identities do |t|
+    create_table(:identities, id: :uuid) do |t|
       t.string :uid
       t.string :provider
       t.string :token
