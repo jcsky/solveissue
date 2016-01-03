@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20160103150752) do
   create_table "parties", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "name"
     t.string   "logo"
+    t.string   "abbreviation"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -104,6 +105,8 @@ ActiveRecord::Schema.define(version: 20160103150752) do
     t.uuid     "district_id"
     t.uuid     "city_id"
     t.string   "name"
+    t.integer  "gender"
+    t.date     "birthday"
     t.string   "image"
     t.string   "url"
     t.string   "email"

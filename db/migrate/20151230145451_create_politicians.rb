@@ -7,7 +7,9 @@ class CreatePoliticians < ActiveRecord::Migration
       t.uuid   :district_id
       t.uuid   :city_id
 
-      t.string :name
+      t.string  :name
+      t.integer :gender
+      t.date    :birthday
 
       # 頭像
       t.string :image
