@@ -4,6 +4,7 @@
 #
 #  id                     :uuid             not null, primary key
 #  email                  :string           default(""), not null
+#  name                   :string
 #  encrypted_password     :string           default(""), not null
 #  reset_password_token   :string
 #  reset_password_sent_at :datetime
@@ -13,6 +14,8 @@
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :inet
 #  last_sign_in_ip        :inet
+#  district_id            :uuid
+#  city_id                :uuid
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #

@@ -2,7 +2,7 @@
 #
 # Table name: identities
 #
-#  id         :integer          not null, primary key
+#  id         :uuid             not null, primary key
 #  uid        :string
 #  provider   :string
 #  token      :string
