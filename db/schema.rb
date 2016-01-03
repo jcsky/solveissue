@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160103150752) do
+ActiveRecord::Schema.define(version: 20160103190611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,18 @@ ActiveRecord::Schema.define(version: 20160103150752) do
 
   add_index "politician_elections", ["election_id"], name: "index_politician_elections_on_election_id", using: :btree
   add_index "politician_elections", ["politician_id"], name: "index_politician_elections_on_politician_id", using: :btree
+
+  create_table "politician_gov_jobs", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.uuid     "politician_id"
+    t.uuid     "gov_job_id"
+    t.uuid     "party_id"
+    t.uuid     "city_id"
+    t.integer  "th"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
 
   create_table "politician_vote_records", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.integer  "user_id"
