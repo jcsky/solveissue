@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230145457) do
+ActiveRecord::Schema.define(version: 20160103150752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,18 +34,38 @@ ActiveRecord::Schema.define(version: 20151230145457) do
 
   create_table "elections", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "name"
+    t.date     "vote_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  create_table "gov_jobs", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "department"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "identities", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "uid"
+    t.string   "provider"
+    t.string   "token"
+    t.uuid     "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "identities", ["user_id"], name: "index_identities_on_user_id", using: :btree
+
   create_table "parties", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "name"
+    t.string   "logo"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "politician_elections", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "result"
+    t.integer  "result"
     t.uuid     "politician_id"
     t.uuid     "election_id"
     t.datetime "created_at"
@@ -67,19 +87,31 @@ ActiveRecord::Schema.define(version: 20151230145457) do
   add_index "politician_vote_records", ["user_id"], name: "index_politician_vote_records_on_user_id", using: :btree
 
   create_table "politician_votes", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.integer  "reputation"
     t.text     "up_voted_user_ids"
     t.text     "down_voted_user_ids"
-    t.uuid     "politician_id"
+    t.uuid     "voteable_id"
+    t.uuid     "voteable_type"
+    t.date     "date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "politician_votes", ["politician_id"], name: "index_politician_votes_on_politician_id", using: :btree
+  add_index "politician_votes", ["voteable_id"], name: "index_politician_votes_on_voteable_id", using: :btree
+  add_index "politician_votes", ["voteable_type"], name: "index_politician_votes_on_voteable_type", using: :btree
 
   create_table "politicians", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
-    t.string   "name"
     t.uuid     "party_id"
+    t.uuid     "district_id"
+    t.uuid     "city_id"
+    t.string   "name"
+    t.string   "image"
+    t.string   "url"
+    t.string   "email"
+    t.string   "office_number"
+    t.integer  "reputation"
+    t.uuid     "election_id"
+    t.uuid     "gov_job_id"
+    t.uuid     "owner_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -89,7 +121,6 @@ ActiveRecord::Schema.define(version: 20151230145457) do
   create_table "profiles", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.integer  "gender"
     t.date     "birthday"
-    t.string   "name"
     t.uuid     "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -99,6 +130,7 @@ ActiveRecord::Schema.define(version: 20151230145457) do
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
+    t.string   "name"
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -108,6 +140,8 @@ ActiveRecord::Schema.define(version: 20151230145457) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
+    t.uuid     "district_id"
+    t.uuid     "city_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end
